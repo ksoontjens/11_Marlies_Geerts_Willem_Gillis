@@ -22,6 +22,8 @@ public class Cube extends HComponent {
 	
 	public void UpdateBlock(Point location){
 		mLocation = location;
+                this.setBounds(0, 0, mLocation.x+mSize, mLocation.y+mSize);
+                repaint();
 	}
 	
 	public static int GetSize() {
@@ -30,6 +32,6 @@ public class Cube extends HComponent {
 	
 	public void paint (Graphics g) {
 		g.setColor(mColor);
-		g.fillRect(mLocation.x-mSize/2, mLocation.y-mSize/2, mSize, mSize);
+		g.fillRect(mLocation.x, mLocation.y, mSize, mSize);
 	}
 }
