@@ -120,4 +120,12 @@ public class Spawner extends TimerTask {
         public Tetromino GetCurrentTetromino(){
             return mCurrentTetromino;
         }
+	
+	public static int GetWidthBoard() {
+	    return WIDTH_BOARD;
+	}
+
+	public static int GetHeightBoard() {
+	    return HEIGHT_BOARD;
+	}
 }

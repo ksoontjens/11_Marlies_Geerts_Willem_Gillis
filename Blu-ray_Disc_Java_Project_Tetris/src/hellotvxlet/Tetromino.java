@@ -10,7 +10,6 @@ import java.awt.Point;
 public class Tetromino {
 
     private byte mRotation = 0; //0 = UP; 1 = RIGHT; 2 = DOWN; 3 = LEFT
-
     private Color mColor;
     private Point mLocation;
     private boolean[][] mTetrominoArr;
@@ -35,7 +34,6 @@ public class Tetromino {
 		}
 	    }
 	}
-
     }
 
     public void RedrawCubes() {
@@ -53,6 +51,15 @@ public class Tetromino {
     public void Update(int time) {
 	mLocation.y++;
 	RedrawCubes();
+	if (CheckCollision()) {
+	    mLocation.y--;
+	    RedrawCubes();
+	    for(int i = 0; i < mCubeArr.length; i++) {
+		Blocks.AddBlocks(ResetCubeLocation(mCubeArr[i].GetLocation()));
+	    }    
+	    Destroy();
+	    mSpawner.SpawnTetromino();
+	}
     }
 
     public void Rotate(boolean direction) {
@@ -74,45 +81,63 @@ public class Tetromino {
 		tempArr[i][j] = mTetrominoArr[3 - j][i];
 	    }
 	}
+	boolean[][] tempArr2 = mTetrominoArr;
 	mTetrominoArr = tempArr;
 	RedrawCubes();
+	
+	if(CheckCollision()) { 
+	    mTetrominoArr = tempArr2;
+	    RedrawCubes();
+	    for(int i = 0; i < mCubeArr.length; i++) {
+		//Blocks.AddBlocks(ResetCubeLocation(mCubeArr[i].GetLocation()));
+	    }    
+	    //mSpawner.SpawnTetromino();
+	}
     }
 
-    public void CheckCollision(int rotation, int transform) {
-	boolean[][] test = Blocks.GetBlocks();
-	byte counter = 0;
-	for (int i = 0; i < 4; i++) {
-	    for (int j = 0; j < 4; j++) {
-		if (mTetrominoArr[j][i]) {
-		    
-		}
+    public boolean CheckCollision() {
+	boolean[][] blockArr = Blocks.GetBlocks();
+	
+	for(int j = 0; j < mCubeArr.length; j++) {
+	    Point pointCube = mCubeArr[j].GetLocation();
+	    pointCube = ResetCubeLocation(pointCube);
+	    if (pointCube.x < 0 || pointCube.x > blockArr.length - 1 || pointCube.y > blockArr[0].length - 1 || (pointCube.y > 0 && blockArr[pointCube.x][pointCube.y]) ) {
+		return true;
 	    }
 	}
-	mSpawner.SpawnTetromino();
+	return false;
     }
 
     public void MoveDown() {
 	mLocation.y++;
 	RedrawCubes();
+	if (CheckCollision()) {
+	    mLocation.y--;
+	     RedrawCubes();
+	}
     }
 
     public void MoveLeftRight(int direction) {
-
-	if (mLocation.x >= 0 && direction < 0) {
-	    mLocation.x += direction;
-	    RedrawCubes();
+	mLocation.x += direction;
+	RedrawCubes();
+	if (CheckCollision()) {
+	    mLocation.x -= direction;
+	     RedrawCubes();
 	}
-	if (mLocation.x <= 5 && direction > 0) {
-	    mLocation.x += direction;
-	    RedrawCubes();
-	}
-
     }
 
     public Point GetLocation() {
 	return mLocation;
     }
-
-    public void Destroy() {
+    
+    private Point ResetCubeLocation(Point pointCube) {
+	pointCube = new Point((pointCube.x - mOffset.x)/Cube.GetSize(), (pointCube.y - mOffset.y)/Cube.GetSize());	    
+	return pointCube;
+    }
+    
+    public void Destroy(){
+	for(int i=0; i < mCubeArr.length; i++){
+	    mCubeArr[i].Destroy();
+	}
     }
 }

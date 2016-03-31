@@ -31,7 +31,16 @@ public class Cube extends HComponent {
 	}
 	
 	public void paint (Graphics g) {
-		g.setColor(mColor);
-		g.fillRect(mLocation.x, mLocation.y, mSize, mSize);
+	    g.setColor(mColor);
+	    g.fillRect(mLocation.x, mLocation.y, mSize, mSize);
 	}
+	
+	public Point GetLocation() {
+	    return mLocation;
+	}
+	
+	 public void Destroy(){
+	    mColor = Color.BLACK;
+	    repaint();
+	 }
 }
