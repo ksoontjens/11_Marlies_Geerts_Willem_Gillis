@@ -10,6 +10,7 @@ import java.awt.Point;
 public class Tetromino {
 
     private byte mRotation = 0; //0 = UP; 1 = RIGHT; 2 = DOWN; 3 = LEFT
+
     private Color mColor;
     private Point mLocation;
     private boolean[][] mTetrominoArr;
@@ -54,10 +55,9 @@ public class Tetromino {
 	if (CheckCollision()) {
 	    mLocation.y--;
 	    RedrawCubes();
-	    for(int i = 0; i < mCubeArr.length; i++) {
-		Blocks.AddBlocks(ResetCubeLocation(mCubeArr[i].GetLocation()));
-	    }    
-	    Destroy();
+	    for (int i = 0; i < mCubeArr.length; i++) {
+		Blocks.AddBlocks(ResetCubeLocation(mCubeArr[i].GetLocation()), mCubeArr[i]);
+	    }
 	    mSpawner.SpawnTetromino();
 	}
     }
@@ -84,24 +84,24 @@ public class Tetromino {
 	boolean[][] tempArr2 = mTetrominoArr;
 	mTetrominoArr = tempArr;
 	RedrawCubes();
-	
-	if(CheckCollision()) { 
+
+	if (CheckCollision()) {
 	    mTetrominoArr = tempArr2;
 	    RedrawCubes();
-	    for(int i = 0; i < mCubeArr.length; i++) {
+	    for (int i = 0; i < mCubeArr.length; i++) {
 		//Blocks.AddBlocks(ResetCubeLocation(mCubeArr[i].GetLocation()));
-	    }    
-	    //mSpawner.SpawnTetromino();
+	    }
+	//mSpawner.SpawnTetromino();
 	}
     }
 
     public boolean CheckCollision() {
-	boolean[][] blockArr = Blocks.GetBlocks();
-	
-	for(int j = 0; j < mCubeArr.length; j++) {
+	Cube[][] blockArr = Blocks.GetBlocks();
+
+	for (int j = 0; j < mCubeArr.length; j++) {
 	    Point pointCube = mCubeArr[j].GetLocation();
 	    pointCube = ResetCubeLocation(pointCube);
-	    if (pointCube.x < 0 || pointCube.x > blockArr.length - 1 || pointCube.y > blockArr[0].length - 1 || (pointCube.y > 0 && blockArr[pointCube.x][pointCube.y]) ) {
+	    if (pointCube.x < 0 || pointCube.x > blockArr.length - 1 || pointCube.y > blockArr[0].length - 1 || (pointCube.y > 0 && blockArr[pointCube.x][pointCube.y] != null)) {
 		return true;
 	    }
 	}
@@ -113,7 +113,7 @@ public class Tetromino {
 	RedrawCubes();
 	if (CheckCollision()) {
 	    mLocation.y--;
-	     RedrawCubes();
+	    RedrawCubes();
 	}
     }
 
@@ -122,22 +122,16 @@ public class Tetromino {
 	RedrawCubes();
 	if (CheckCollision()) {
 	    mLocation.x -= direction;
-	     RedrawCubes();
+	    RedrawCubes();
 	}
     }
 
     public Point GetLocation() {
 	return mLocation;
     }
-    
+
     private Point ResetCubeLocation(Point pointCube) {
-	pointCube = new Point((pointCube.x - mOffset.x)/Cube.GetSize(), (pointCube.y - mOffset.y)/Cube.GetSize());	    
+	pointCube = new Point((pointCube.x - mOffset.x) / Cube.GetSize(), (pointCube.y - mOffset.y) / Cube.GetSize());
 	return pointCube;
-    }
-    
-    public void Destroy(){
-	for(int i=0; i < mCubeArr.length; i++){
-	    mCubeArr[i].Destroy();
-	}
     }
 }
