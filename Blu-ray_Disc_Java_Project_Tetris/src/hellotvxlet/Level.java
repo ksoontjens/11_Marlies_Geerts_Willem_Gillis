@@ -1,24 +1,27 @@
 package hellotvxlet;
 
+import org.havi.ui.HVisible;
+
 /**
  *
  * @author student
  */
 public class Level {
-	private float mSpeedMultiplier = 1;
-	private byte mLevelAmount = 0;
-	private int mNextLevelScore = 50;
-	
-	public Level() {
-		
-	}
-	
-	public void LevelUp(){
+
+	private static int mSpeedMultiplier = 1000;
+	private static byte mLevelAmount = 1;
+
+	public static void LevelUp() {
 		mLevelAmount++;
-		mSpeedMultiplier*=1.5f;
+		mSpeedMultiplier *= 0.9f;
+		HelloTVXlet.GetLevelLabel().setTextContent("Level: "+mLevelAmount, HVisible.ALL_STATES);
+	}
+
+	public static int GetSpeed() {
+		return mSpeedMultiplier;
 	}
 	
-	public byte GetLevelAmount(){
+	public static byte GetLevelAmount() {
 		return mLevelAmount;
 	}
 }

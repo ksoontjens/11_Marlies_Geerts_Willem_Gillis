@@ -8,56 +8,74 @@ import java.awt.Point;
  */
 public class Blocks {
 
-    private static Cube[][] mBlocksArr;
+	private static Cube[][] mBlocksArr;
 
-    public Blocks(int widthBoard, int heightBoard) {
-	mBlocksArr = new Cube[widthBoard][heightBoard];
-    }
+	public Blocks(int widthBoard, int heightBoard) {
+		mBlocksArr = new Cube[widthBoard][heightBoard];
+	}
 
-    public static void AddBlocks(Point blocks, Cube cubeIn) {
-	mBlocksArr[blocks.x][blocks.y] = cubeIn;
-	CheckLines();
-	PrintArrayTest();
-    }
-
-    public static Cube[][] GetBlocks() {
-	return mBlocksArr;
-    }
-
-    private static void CheckLines() {
-	for (int i = 0; i < mBlocksArr.length; i++) {
-	    boolean isClear = true;
-	    for (int j = 0; j < mBlocksArr[0].length; j++) {
-		if (mBlocksArr[i][j] == null) {
-		    isClear = false;
+	public static void AddBlocks(Point[] blocks, Cube[] cubeIn) {
+		for (int i = 0; i < cubeIn.length; i++) {
+			if (blocks[i].y<0) {
+				HelloTVXlet.GameOver();
+			}else{
+				mBlocksArr[blocks[i].x][blocks[i].y] = cubeIn[i];
+			}
 		}
-	    }
-	    if (isClear) {
-		System.out.println("Removing lines");
-		RemoveLine(i);
-	    }
-	}
-    }
-
-    private static void RemoveLine(int line) {
-	for (int j = 0; j < mBlocksArr[0].length; j++) {
-	    mBlocksArr[line][j].Destroy();
-	    mBlocksArr[line][j] = null;
+		PrintBoard();
+		CheckLines();
 	}
 
-	for (int i = line; i < mBlocksArr.length; i++) {
-	    for (int j = 0; j < mBlocksArr[0].length; j++) {
-		mBlocksArr[i][j].UpdateBlock(new Point( mBlocksArr[i][j].GetLocation().x, mBlocksArr[i][j].GetLocation().y + Cube.GetSize()));		
-	    }
+	public static Cube[][] GetBlocks() {
+		return mBlocksArr;
 	}
-    }
-    
-    private static void PrintArrayTest() {
-	for (int i = 0; i < mBlocksArr.length; i++) {
-	    for (int j = 0; j < mBlocksArr[0].length; j++) {
-		System.out.print(mBlocksArr[i][j] + " ");
-	    }
-	    System.out.println("");
-	    }
-    }
+
+	private static void CheckLines() {
+		byte linesGotten = 0;
+		for (int i = 0; i < mBlocksArr[0].length; i++) {
+			boolean isClear = true;
+			for (int j = 0; j < mBlocksArr.length; j++) {
+				if (mBlocksArr[j][i] == null) {
+					isClear = false;
+				}
+			}
+			if (isClear) {
+				System.out.println("Removing line: " + (i+1));
+				RemoveLine(i);
+				linesGotten++;
+			}
+		}
+		Score.AddScore(linesGotten);
+	}
+
+	private static void RemoveLine(int line) {
+		for (int j = 0; j < mBlocksArr.length; j++) {
+			mBlocksArr[j][line].Destroy();
+			mBlocksArr[j][line] = null;
+		}
+
+		for (int i = line; i > 0; i--) {
+			for (int j = 0; j < mBlocksArr.length; j++) {
+				if (mBlocksArr[j][i-1] != null) {
+					mBlocksArr[j][i] = mBlocksArr[j][i-1];
+					mBlocksArr[j][i-1] = null;
+					mBlocksArr[j][i].UpdateBlock(new Point(mBlocksArr[j][i].GetLocation().x, mBlocksArr[j][i].GetLocation().y + Cube.GetSize()));
+				}
+			}
+		}
+	}
+
+	private static void PrintBoard() {
+		for (int i = 0; i < mBlocksArr[0].length; i++) {
+			for (int j = 0; j < mBlocksArr.length; j++) {
+				if (mBlocksArr[j][i] == null) {
+					System.out.print(0);
+				} else {
+					System.out.print(1);
+				}
+			}
+			System.out.println("");
+		}
+		System.out.println("");
+	}
 }
