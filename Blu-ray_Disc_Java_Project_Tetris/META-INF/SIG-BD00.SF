@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: 1.6.0_16 (Sun Microsystems Inc.)
 BDJ-Signature-Version: 1.0
-SHA1-Digest-Manifest: EihvPb2vLdkP22ob+VDlzytz/1w=
+SHA1-Digest-Manifest: z5Ad3UQvJVlowoB/NN9xD1qLkv8=
 
 Name: hellotvxlet/Border.class
-SHA1-Digest: gqumF6KBUDBYNq3DQe+CiucUs7o=
+SHA1-Digest: Q+EwDq+U4C2a+52HrFjg6iLSteo=
 
 Name: hellotvxlet/HelloTVXlet$1.class
 SHA1-Digest: jL4rl+dtvgbj4VErj8qjkXfGCe4=
@@ -13,31 +13,31 @@ Name: hellotvxlet/MijnComponent.class
 SHA1-Digest: cCKNXsi778+2czHOCad5yOFrlmw=
 
 Name: hellotvxlet/Score.class
-SHA1-Digest: jDya3ZOt3prlar1kcRltFruAr5Y=
+SHA1-Digest: 1nZj0VCVIC5n36pS0x+TAib0Heg=
 
 Name: hellotvxlet/Level.class
 SHA1-Digest: SJ8FGz983uNdF4rAjch8+ksR4Lg=
 
 Name: hellotvxlet/HelloTVXlet.class
-SHA1-Digest: eDoGy9nz8Jfql6IB7/1tcDQeoXE=
+SHA1-Digest: lgcx1vkN+RhGuJMo7JEmkyzgmTc=
 
 Name: hellotvxlet/Blocks.class
-SHA1-Digest: 1oEzVd3iTwFnL4tSBOSe1zK1EYU=
+SHA1-Digest: CdmNWml3FnN0z4Sx7i+gfGbSpAo=
 
 Name: hellotvxlet/MijnComponentImage.class
 SHA1-Digest: q30B8nyo4JhLfHbZp9SRlweNNkA=
 
 Name: hellotvxlet/Cube.class
-SHA1-Digest: VQnYGmR3q85OBkvCPRGrlaULuEM=
+SHA1-Digest: gavWBacrFl97EK3W+qSpk0qRT+U=
 
 Name: hellotvxlet/Tetromino.class
-SHA1-Digest: unfqGa2MlFDbN3kPMxofDrKQN2Q=
+SHA1-Digest: zIZzYxqGysJ91Ccfr0eW8Z+1nIo=
 
 Name: hellotvxlet/bluray.HelloTVXlet.perm
 SHA1-Digest: 84ZO/rYCyy0JStmaLbg1GDVEFhQ=
 
 Name: hellotvxlet/Spawner.class
-SHA1-Digest: UYAOqzvpmVJp4kAVD4Etkason5s=
+SHA1-Digest: T/2XjMqI4DFozDWr+aSarzy5UgM=
 
 Name: hellotvxlet/MijnTimerTask.class
 SHA1-Digest: 15ChUx5upPLbMji+M/2dksR5G0A=

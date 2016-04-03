@@ -2,6 +2,7 @@ package hellotvxlet;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Font;
 import javax.tv.xlet.*;
 import org.dvb.event.UserEvent;
@@ -22,15 +23,21 @@ public class HelloTVXlet implements Xlet, UserEventListener {
 	private static HScene scene = null;
 	private static boolean mPaused = false;
 	private static boolean mIsGameOver = false;
-	private static Border mTetrisFieldBorder = new Border(38, 10, 250, 500, 10);
 	private static Spawner mSpawner;
 	private static Timer mTimer;
-	
-	private static HStaticText mPausedLabel = new HStaticText("PAUSED",38+125-200,10+250-25,400,50);
-	private static HStaticText mGameOverLabel = new HStaticText("GAME OVER",38+125-200,10+250-25,400,50);
-	private static HStaticText mLevelLabel = new HStaticText("Level: 1",38+325,10+175-30,400,60);
-	private static HStaticText mScoreLabel = new HStaticText("Score: 0",38+325+150,10+175-30,400,60);
-	private static HStaticText mAmountOfLinesLabel = new HStaticText("Amount of lines: 0",38+325,10+175-30+60,400,60);
+	private static Point mFieldPosition = new Point(38, 10);
+	private static Dimension mFieldDimensions = new Dimension(250, 500);
+	private static int mCubeSize = mFieldDimensions.width / 10;
+	private static int mFieldBorderWidth = 10;
+	private static Border mTetrisFieldBorder = new Border(mFieldPosition, mFieldDimensions, mFieldBorderWidth);
+	private static Container mPlayingFieldContainer = new Container();
+	private static Container mNextTetrominoFieldContainer = new Container();
+	private static Container mGameDataContainer = new Container();
+	private static HStaticText mPausedLabel = new HStaticText("PAUSED", 0, 0, mFieldDimensions.width, mFieldDimensions.height);
+	private static HStaticText mGameOverLabel = new HStaticText("GAME OVER", 0, 0, mFieldDimensions.width, mFieldDimensions.height);
+	private static HStaticText mLevelLabel = new HStaticText("Level: 1", 0, 0, 400, 60);
+	private static HStaticText mScoreLabel = new HStaticText("Score: 0", 130, 0, 400, 60);
+	private static HStaticText mAmountOfLinesLabel = new HStaticText("Amount of lines: 0", 0, 60, 400, 60);
 
 	public void initXlet(XletContext ctx) throws XletStateChangeException {
 		scene = HSceneFactory.getInstance().getDefaultHScene();
@@ -51,34 +58,39 @@ public class HelloTVXlet implements Xlet, UserEventListener {
 	}
 
 	public void startXlet() throws XletStateChangeException {
+		Cube.SetSize(mCubeSize);
+		
 		mPausedLabel.setVisible(false);
 		mPausedLabel.setFont(new Font("Serif", Font.BOLD, 30));
-		scene.add(mPausedLabel);
-		
+		mPlayingFieldContainer.add(mPausedLabel);
+
 		mGameOverLabel.setVisible(false);
 		mGameOverLabel.setFont(new Font("Serif", Font.BOLD, 30));
-		scene.add(mGameOverLabel);
-		
+		mPlayingFieldContainer.add(mGameOverLabel);
+
 		mScoreLabel.setHorizontalAlignment(HVisible.HALIGN_LEFT);
 		mLevelLabel.setHorizontalAlignment(HVisible.HALIGN_LEFT);
 		mAmountOfLinesLabel.setHorizontalAlignment(HVisible.HALIGN_LEFT);
-		
-		scene.add(mScoreLabel);
-		scene.add(mLevelLabel);
-		scene.add(mAmountOfLinesLabel);
+		mGameDataContainer.add(mAmountOfLinesLabel);
 
+		mGameDataContainer.add(mScoreLabel);
+		mGameDataContainer.add(mLevelLabel);
+
+		mGameDataContainer.setBounds(mFieldPosition.x + mFieldDimensions.width + 30, mFieldPosition.y + mCubeSize * 4 + 30, 400, 200);
+		mPlayingFieldContainer.setBounds(mFieldPosition.x, mFieldPosition.y, mFieldDimensions.width, mFieldDimensions.height);
+		mNextTetrominoFieldContainer.setBounds(mFieldPosition.x + mFieldDimensions.width + 30, mFieldPosition.y, mCubeSize * 4, mCubeSize * 4);
+
+		scene.add(mPlayingFieldContainer);
+		scene.add(mNextTetrominoFieldContainer);
+		scene.add(mGameDataContainer);
 
 		scene.add(mTetrisFieldBorder);
 		mSpawner = new Spawner();
 		scene.validate();
 		scene.setVisible(true);
 
-		//mTimer = new Timer(50, mSpawner);
-		//mTimer.start();
-		
 		mTimer = new Timer();
-		mTimer.scheduleAtFixedRate(mSpawner, 0, 300);
-		
+		mTimer.scheduleAtFixedRate(mSpawner, 0, 1);
 	}
 
 	public void pauseXlet() {
@@ -87,64 +99,62 @@ public class HelloTVXlet implements Xlet, UserEventListener {
 	public void destroyXlet(boolean unconditional) throws XletStateChangeException {
 	}
 
-//	private static void Timing () {
-//		while (!mPaused) {
-//			mTimer++;
-//			if (mTimer >= Level.GetSpeed()) {
-//				mSpawner.run();
-//				mTimer = 0;
-//			}
-//		}
-//		
-//	}
-	//public static void ChangeSpeed() {
-		//mTimer.setDelay(20);
-		//mTimer.cancel();
-		//mTimer = new Timer();
-		//mTimer.scheduleAtFixedRate(mSpawner, 0, 20);
-		//mSpawner.scheduledExecutionTime();
-	//}
-	public static void AddToScene(Cube itemToAdd) {
-		scene.add(itemToAdd);
-		scene.repaint();
+	public static void AddToScene(Cube itemToAdd, int container) {
+		switch (container) {
+			case 0:
+				scene.add(itemToAdd);
+				scene.repaint();
+				break;
+			case 1:
+				mPlayingFieldContainer.add(itemToAdd);
+				mPlayingFieldContainer.repaint();
+				break;
+			case 2:
+				mNextTetrominoFieldContainer.add(itemToAdd);
+				mNextTetrominoFieldContainer.repaint();
+				break;
+		}
 	}
 
-	public static void RemoveFromScene(Cube itemToRemove) {
-		scene.remove(itemToRemove);
-		scene.repaint();
+	public static void RemoveFromScene(Cube itemToRemove, int container) {
+		switch (container) {
+			case 0:
+				scene.remove(itemToRemove);
+				scene.repaint();
+				break;
+			case 1:
+				mPlayingFieldContainer.remove(itemToRemove);
+				mPlayingFieldContainer.repaint();
+				break;
+			case 2:
+				mNextTetrominoFieldContainer.remove(itemToRemove);
+				mNextTetrominoFieldContainer.repaint();
+				break;
+		}
 	}
 
 	public static void GameOver() {
-		//mTimer.cancel();
-		//mTimer.stop();
+		mTimer.cancel();
 		mIsGameOver = true;
 		mGameOverLabel.setVisible(mIsGameOver);
 	}
 
-	public static HScene GetScene() {
-		return scene;
-	}
-
-	public static Border GetTetrisFieldBorder() {
-		return mTetrisFieldBorder;
-	}
-	
 	public static boolean GetIsGamePaused() {
 		return mPaused;
 	}
 
-	public static HStaticText GetScoreLabel () {
+	public static HStaticText GetScoreLabel() {
 		return mScoreLabel;
 	}
-	
-	public static HStaticText GetLevelLabel () {
+
+	public static HStaticText GetLevelLabel() {
 		return mLevelLabel;
 	}
-	
-	public static HStaticText GetAmountOfLinesLabel () {
+
+	public static HStaticText GetAmountOfLinesLabel() {
 		return mAmountOfLinesLabel;
 	}
-	
+
 	public void userEventReceived(UserEvent e) {
 		if (e.getType() == KeyEvent.KEY_PRESSED) {
 			if (!mIsGameOver && !mPaused) {
@@ -169,8 +179,6 @@ public class HelloTVXlet implements Xlet, UserEventListener {
 			if (!mIsGameOver) {
 				if (e.getCode() == HRcEvent.VK_ENTER) {
 					mPaused = !mPaused;
-					System.out.println("Removing line:");
-					//ChangeSpeed();
 					mPausedLabel.setVisible(mPaused);
 				}
 			}

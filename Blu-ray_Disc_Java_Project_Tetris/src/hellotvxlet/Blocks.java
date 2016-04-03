@@ -14,12 +14,14 @@ public class Blocks {
 		mBlocksArr = new Cube[widthBoard][heightBoard];
 	}
 
-	public static void AddBlocks(Point[] blocks, Cube[] cubeIn) {
+	public static void AddBlocks(Cube[] cubeIn) {
 		for (int i = 0; i < cubeIn.length; i++) {
-			if (blocks[i].y<0) {
+			if (cubeIn[i].GetLocalPosition().y<0) {
 				HelloTVXlet.GameOver();
-			}else{
-				mBlocksArr[blocks[i].x][blocks[i].y] = cubeIn[i];
+			}
+			else{
+				mBlocksArr[cubeIn[i].GetLocalPosition().x][cubeIn[i].GetLocalPosition().y] = cubeIn[i];
+				HelloTVXlet.AddToScene(mBlocksArr[cubeIn[i].GetLocalPosition().x][cubeIn[i].GetLocalPosition().y],1);
 			}
 		}
 		PrintBoard();
@@ -40,7 +42,6 @@ public class Blocks {
 				}
 			}
 			if (isClear) {
-				System.out.println("Removing line: " + (i+1));
 				RemoveLine(i);
 				linesGotten++;
 			}
@@ -50,7 +51,7 @@ public class Blocks {
 
 	private static void RemoveLine(int line) {
 		for (int j = 0; j < mBlocksArr.length; j++) {
-			mBlocksArr[j][line].Destroy();
+			HelloTVXlet.RemoveFromScene(mBlocksArr[j][line], 1);
 			mBlocksArr[j][line] = null;
 		}
 
@@ -59,7 +60,7 @@ public class Blocks {
 				if (mBlocksArr[j][i-1] != null) {
 					mBlocksArr[j][i] = mBlocksArr[j][i-1];
 					mBlocksArr[j][i-1] = null;
-					mBlocksArr[j][i].UpdateBlock(new Point(mBlocksArr[j][i].GetLocation().x, mBlocksArr[j][i].GetLocation().y + Cube.GetSize()));
+					mBlocksArr[j][i].UpdateCube(new Point(j, i));
 				}
 			}
 		}

@@ -13,34 +13,32 @@ public class Cube extends HComponent {
 
 	private static int mSize = 25;
 	private Color mColor;
-	private Point mLocation;
+	private Point mLocalPosition;
+	private Point mGlobalPosition;
 
 	public Cube(Point location, Color color) {
 		mColor = color;
-		mLocation = location;
-		this.setBackground(Color.PINK);
-		this.setBounds(0, 0, mLocation.x + mSize, location.y + mSize);
+		mLocalPosition = location;
+		mGlobalPosition = new Point(mLocalPosition.x*mSize, mLocalPosition.y*mSize);
+		this.setBounds(mGlobalPosition.x, mGlobalPosition.y,  mSize, mSize);
 	}
 
-	public void UpdateBlock(Point location) {
-		mLocation = location;
-		this.setBounds(0, 0, mLocation.x + mSize, mLocation.y + mSize);
-	}
-
-	public static int GetSize() {
-		return mSize;
+	public void UpdateCube(Point location) {
+		mLocalPosition = location;
+		mGlobalPosition = new Point(mLocalPosition.x*mSize, mLocalPosition.y*mSize);
+		this.setBounds(mGlobalPosition.x, mGlobalPosition.y,  mSize, mSize);
 	}
 
 	public void paint(Graphics g) {
 		g.setColor(mColor);
-		g.fillRect(mLocation.x, mLocation.y, mSize, mSize);
+		g.fillRect(0, 0, mSize, mSize);
 	}
 
-	public Point GetLocation() {
-		return mLocation;
+	public Point GetLocalPosition() {
+		return mLocalPosition;
 	}
-
-	public void Destroy() {
-		HelloTVXlet.RemoveFromScene(this);
+	
+	public static void SetSize(int size) {
+		mSize = size;
 	}
 }
