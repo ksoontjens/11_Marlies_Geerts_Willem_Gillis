@@ -1,6 +1,7 @@
 package hellotvxlet;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import org.havi.ui.HComponent;
@@ -11,30 +12,27 @@ import org.havi.ui.HComponent;
  */
 public class Border extends HComponent {
 
-    int mPosX;
-    int mPosY;
-    int mWidth;
-    int mHeight;
-    int mBorderWidth;
+	private Point mPosition;
+	private Dimension mDimensions;
+	
+	private int mBorderWidth;
 
-    public Border(int posX, int posY, int width, int height, int borderWidth) {
-	mPosX = posX;
-	mPosY = posY;
-	mWidth = width;
-	mHeight = height;
-	mBorderWidth = borderWidth;
-	this.setBounds(0, 0, mPosX + mWidth + mBorderWidth * 2, mPosY + mHeight + mBorderWidth * 2);
-    }
+	public Border(Point position, Dimension dimensions, int borderWidth) {
+		mPosition = position;
+		mDimensions = dimensions;
+		mBorderWidth = borderWidth;
+		this.setBounds(0, 0, mPosition.x + mDimensions.width + mBorderWidth * 2, mPosition.y + mDimensions.height + mBorderWidth * 2);
+	}
 
-    public void paint(Graphics g) {
-	g.setColor(Color.GRAY);
-	g.fillRect(mPosX - mBorderWidth, mPosY - mBorderWidth, mBorderWidth, mHeight + mBorderWidth * 2);
-	g.fillRect(mPosX - mBorderWidth, mPosY - mBorderWidth, mWidth + mBorderWidth * 2, mBorderWidth);
-	g.fillRect(mPosX - mBorderWidth, mPosY + mHeight, mWidth + mBorderWidth * 2, mBorderWidth);
-	g.fillRect(mPosX + mWidth, mPosY - mBorderWidth, mBorderWidth, mHeight + mBorderWidth * 2);
-    }
+	public void paint(Graphics g) {
+		g.setColor(Color.GRAY);
+		g.fillRect(mPosition.x - mBorderWidth, mPosition.y - mBorderWidth, mBorderWidth, mDimensions.height + mBorderWidth * 2);
+		g.fillRect(mPosition.x - mBorderWidth, mPosition.y - mBorderWidth, mDimensions.width + mBorderWidth * 2, mBorderWidth);
+		g.fillRect(mPosition.x - mBorderWidth, mPosition.y + mDimensions.height, mDimensions.width + mBorderWidth * 2, mBorderWidth);
+		g.fillRect(mPosition.x + mDimensions.width, mPosition.y - mBorderWidth, mBorderWidth, mDimensions.height + mBorderWidth * 2);
+	}
 
-    public Point GetPosition() {
-	return new Point(mPosX, mPosY);
-    }
+	public Point GetPosition() {
+		return mPosition;
+	}
 }

@@ -53,70 +53,80 @@ public class Spawner extends TimerTask {
 	private Random mRnd = new Random();
 	private Tetromino mCurrentTetromino;
 	private Tetromino mNextTetromino;
-	private Point mTetrisFieldBorderPos;
 	private int mTime = 0;
 	private Blocks mBlocks;
 	private static final int WIDTH_BOARD = 10;
 	private static final int HEIGHT_BOARD = 20;
+	private int mSpeed;
+	private static int mCounter  = 0;
 
 	public Spawner() {
 		mNextType = (byte) mRnd.nextInt(7);
-		mTetrisFieldBorderPos = HelloTVXlet.GetTetrisFieldBorder().GetPosition();
 		SpawnTetromino();
 		mBlocks = new Blocks(WIDTH_BOARD, HEIGHT_BOARD);
+		mSpeed = Level.GetSpeed();
 	}
 
 	public void run() {
 		if (!HelloTVXlet.GetIsGamePaused()) {
-			mTime++;
-			mCurrentTetromino.Update(mTime);
+			if (mSpeed < mCounter) {
+				mTime++;
+				mCurrentTetromino.Update(mTime);
+				mCounter = 0;
+			}
+			mCounter++;
 		}
 	}
 
 	public void SpawnTetromino() {
 		mCurrentType = mNextType;
 		mNextType = (byte) mRnd.nextInt(7);
-		mCurrentTetromino = TetrominoPicker(mCurrentType, new Point(3, -3), mTetrisFieldBorderPos);
+		mCurrentTetromino = TetrominoPicker(mCurrentType, new Point(3, -3), false);
 
 		ShowNext();
+		mSpeed = Level.GetSpeed();
 	}
 
-	private Tetromino TetrominoPicker(byte tetrominoNumber, Point location, Point offset) {
-		Tetromino tetrominoToShow = null;
-
+	private Tetromino TetrominoPicker(byte tetrominoNumber, Point location, boolean isStatic) {
+		boolean[][] tetrominoArr = null;
 		switch (tetrominoNumber) {
 			case 0:
-				tetrominoToShow = new Tetromino(mColorArr[tetrominoNumber], mOArr, location, offset, this);
+				tetrominoArr = mOArr;
 				break;
 			case 1:
-				tetrominoToShow = new Tetromino(mColorArr[tetrominoNumber], mIArr, location, offset, this);
+				tetrominoArr = mIArr;
 				break;
 			case 2:
-				tetrominoToShow = new Tetromino(mColorArr[tetrominoNumber], mSArr, location, offset, this);
+				tetrominoArr = mSArr;
 				break;
 			case 3:
-				tetrominoToShow = new Tetromino(mColorArr[tetrominoNumber], mZArr, location, offset, this);
+				tetrominoArr = mZArr;
 				break;
 			case 4:
-				tetrominoToShow = new Tetromino(mColorArr[tetrominoNumber], mLArr, location, offset, this);
+				tetrominoArr = mLArr;
 				break;
 			case 5:
-				tetrominoToShow = new Tetromino(mColorArr[tetrominoNumber], mJArr, location, offset, this);
+				tetrominoArr = mJArr;
 				break;
 			case 6:
-				tetrominoToShow = new Tetromino(mColorArr[tetrominoNumber], mTArr, location, offset, this);
+				tetrominoArr = mTArr;
 				break;
 			default:
 				break;
 		}
-		return tetrominoToShow;
+
+		if (!isStatic) {
+			return new Tetromino(mColorArr[tetrominoNumber], tetrominoArr, location, this);
+		} else {
+			return new Tetromino(mColorArr[tetrominoNumber], tetrominoArr, this);
+		}
 	}
 
 	private void ShowNext() {
 		if (mNextTetromino != null) {
 			mNextTetromino.Destroy();
 		}
-		mNextTetromino = TetrominoPicker(mNextType, new Point(0, 0), new Point(350, mTetrisFieldBorderPos.y));
+		mNextTetromino = TetrominoPicker(mNextType, new Point(0, 0), true);
 	}
 
 	public Tetromino GetCurrentTetromino() {

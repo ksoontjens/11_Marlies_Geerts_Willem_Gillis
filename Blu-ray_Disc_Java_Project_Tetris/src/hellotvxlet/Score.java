@@ -11,7 +11,7 @@ public class Score {
 	private static int mScore = 0;
 	private static int mPointsLine = 5;
 	private static int mTotalLines = 0;	
-	private static int mNextLevelScore = 5;
+	private static int mNextLevelScore = 10;
 
 	public static void UpdatePointsLine() {
 		mPointsLine *= 2;
