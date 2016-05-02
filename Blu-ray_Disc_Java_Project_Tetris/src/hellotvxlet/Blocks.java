@@ -8,31 +8,33 @@ import java.awt.Point;
  */
 public class Blocks {
 
-	private static Cube[][] mBlocksArr;
+	private Cube[][] mBlocksArr;
+	private SingletonObject mObject;
 
 	public Blocks(int widthBoard, int heightBoard) {
-		mBlocksArr = new Cube[widthBoard][heightBoard];
+		mObject = SingletonObject.getInstance();
+		mBlocksArr = new Cube[widthBoard][heightBoard];	
 	}
 
-	public static void AddBlocks(Cube[] cubeIn) {
+	public void AddBlocks(Cube[] cubeIn) {
 		for (int i = 0; i < cubeIn.length; i++) {
-			if (cubeIn[i].GetLocalPosition().y<0) {
-				HelloTVXlet.GameOver();
+			if (cubeIn[i].GetLocalPosition().y<1) {
+				mObject.GameOver();
 			}
 			else{
 				mBlocksArr[cubeIn[i].GetLocalPosition().x][cubeIn[i].GetLocalPosition().y] = cubeIn[i];
-				HelloTVXlet.AddToScene(mBlocksArr[cubeIn[i].GetLocalPosition().x][cubeIn[i].GetLocalPosition().y],1);
+				mObject.AddToScene(mBlocksArr[cubeIn[i].GetLocalPosition().x][cubeIn[i].GetLocalPosition().y],1);
 			}
 		}
 		PrintBoard();
 		CheckLines();
 	}
 
-	public static Cube[][] GetBlocks() {
+	public Cube[][] GetBlocks() {
 		return mBlocksArr;
 	}
 
-	private static void CheckLines() {
+	private void CheckLines() {
 		byte linesGotten = 0;
 		for (int i = 0; i < mBlocksArr[0].length; i++) {
 			boolean isClear = true;
@@ -46,12 +48,12 @@ public class Blocks {
 				linesGotten++;
 			}
 		}
-		Score.AddScore(linesGotten);
+		Score.getInstance().AddScore(linesGotten);
 	}
 
-	private static void RemoveLine(int line) {
+	private void RemoveLine(int line) {
 		for (int j = 0; j < mBlocksArr.length; j++) {
-			HelloTVXlet.RemoveFromScene(mBlocksArr[j][line], 1);
+			SingletonObject.getInstance().RemoveFromScene(mBlocksArr[j][line], 1);
 			mBlocksArr[j][line] = null;
 		}
 
@@ -66,7 +68,7 @@ public class Blocks {
 		}
 	}
 
-	private static void PrintBoard() {
+	private void PrintBoard() {
 		for (int i = 0; i < mBlocksArr[0].length; i++) {
 			for (int j = 0; j < mBlocksArr.length; j++) {
 				if (mBlocksArr[j][i] == null) {

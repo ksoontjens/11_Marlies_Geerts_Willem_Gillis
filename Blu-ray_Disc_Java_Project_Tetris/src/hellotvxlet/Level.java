@@ -8,20 +8,30 @@ import org.havi.ui.HVisible;
  */
 public class Level {
 
-	private static int mSpeedMultiplier = 1000;
-	private static byte mLevelAmount = 1;
+	private int mSpeedMultiplier = 1000;
+	private byte mLevelAmount = 1;
 
-	public static void LevelUp() {
+	private static Level instance = new Level();
+	
+	public Level() {
+		
+	}
+	
+	public static Level getInstance() {
+		return instance;
+	}
+		
+	public void LevelUp() {
 		mLevelAmount++;
 		mSpeedMultiplier *= 0.9f;
-		HelloTVXlet.GetLevelLabel().setTextContent("Level: "+mLevelAmount, HVisible.ALL_STATES);
+		SingletonObject.getInstance().GetLevelLabel().setTextContent("Level: "+mLevelAmount, HVisible.ALL_STATES);
 	}
 
-	public static int GetSpeed() {
+	public int GetSpeed() {
 		return mSpeedMultiplier;
 	}
 	
-	public static byte GetLevelAmount() {
+	public byte GetLevelAmount() {
 		return mLevelAmount;
 	}
 }

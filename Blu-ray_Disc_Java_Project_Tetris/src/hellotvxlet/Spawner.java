@@ -54,20 +54,20 @@ public class Spawner extends TimerTask {
 	private Tetromino mNextTetromino;
 	private int mTime = 0;
 	private Blocks mBlocks;
-	private static final int WIDTH_BOARD = 10;
-	private static final int HEIGHT_BOARD = 20;
+	private final int WIDTH_BOARD = 10;
+	private final int HEIGHT_BOARD = 20;
 	private int mSpeed;
-	private static int mCounter  = 0;
+	private int mCounter  = 0;
 
 	public Spawner() {
 		mNextType = (byte) mRnd.nextInt(7);
-		SpawnTetromino();
 		mBlocks = new Blocks(WIDTH_BOARD, HEIGHT_BOARD);
-		mSpeed = Level.GetSpeed();
+		SpawnTetromino();		
+		mSpeed = Level.getInstance().GetSpeed();
 	}
 
 	public void run() {
-		if (!HelloTVXlet.GetIsGamePaused()) {
+		if (!SingletonObject.getInstance().GetIsGamePaused()) {
 			if (mSpeed < mCounter) {
 				mTime++;
 				mCurrentTetromino.Update(mTime);
@@ -83,7 +83,7 @@ public class Spawner extends TimerTask {
 		mCurrentTetromino = TetrominoPicker(mCurrentType, new Point(3, -3), false);
 
 		ShowNext();
-		mSpeed = Level.GetSpeed();
+		mSpeed = Level.getInstance().GetSpeed();
 	}
 
 	private Tetromino TetrominoPicker(byte tetrominoNumber, Point location, boolean isStatic) {
@@ -115,7 +115,7 @@ public class Spawner extends TimerTask {
 		}
 
 		if (!isStatic) {
-			return new Tetromino(mColorArr[tetrominoNumber], tetrominoArr, location, this);
+			return new Tetromino(mColorArr[tetrominoNumber], tetrominoArr, location, this, mBlocks);
 		} else {
 			return new Tetromino(mColorArr[tetrominoNumber], tetrominoArr, this);
 		}

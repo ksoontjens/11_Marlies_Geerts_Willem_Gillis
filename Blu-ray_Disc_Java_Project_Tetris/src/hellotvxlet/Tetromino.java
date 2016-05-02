@@ -16,20 +16,24 @@ public class Tetromino {
 	private Cube[] mCubeArr = new Cube[4];
 	private Spawner mSpawner;
 	private boolean mIsStatic;
+	private SingletonObject mObject;
+	private Blocks mBlocks;
 
-	public Tetromino(Color color, boolean[][] tetrominoArr, Point location, Spawner spawner) {
+	public Tetromino(Color color, boolean[][] tetrominoArr, Point location, Spawner spawner, Blocks blocks) {
 		mColor = color;
 		mTetrominoArr = tetrominoArr;
 		mLocation = location;
 		mSpawner = spawner;
 		mIsStatic = false;
+		mBlocks = blocks;
+		mObject = SingletonObject.getInstance();
 
 		byte counter = 0;
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
 				if (mTetrominoArr[j][i]) {
 					mCubeArr[counter] = new Cube(new Point(i + mLocation.x, j + mLocation.y), mColor);
-					HelloTVXlet.AddToScene(mCubeArr[counter],1);
+					mObject.AddToScene(mCubeArr[counter],1);
 					counter++;
 				}
 			}
@@ -41,13 +45,14 @@ public class Tetromino {
 		mTetrominoArr = tetrominoArr;
 		mSpawner = spawner;
 		mIsStatic = true;
-
+		mObject = SingletonObject.getInstance();
+		
 		byte counter = 0;
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
 				if (mTetrominoArr[j][i]) {
 					mCubeArr[counter] = new Cube(new Point(i, j), mColor);
-					HelloTVXlet.AddToScene(mCubeArr[counter],2);
+					mObject.AddToScene(mCubeArr[counter],2);
 					counter++;
 				}
 			}
@@ -72,7 +77,7 @@ public class Tetromino {
 		if (CheckCollision()) {
 			mLocation.y--;
 			RedrawCubes();
-			Blocks.AddBlocks(mCubeArr);
+			mBlocks.AddBlocks(mCubeArr);
 			mSpawner.SpawnTetromino();
 		}
 	}
@@ -107,7 +112,7 @@ public class Tetromino {
 	}
 
 	public boolean CheckCollision() {
-		Cube[][] blockArr = Blocks.GetBlocks();
+		Cube[][] blockArr = mBlocks.GetBlocks();
 
 		for (int j = 0; j < mCubeArr.length; j++) {
 			Point pointCube = mCubeArr[j].GetLocalPosition();
@@ -139,9 +144,9 @@ public class Tetromino {
 	public void Destroy() {
 		for (int i = 0; i < mCubeArr.length; i++) {
 			if (!mIsStatic) {
-				HelloTVXlet.RemoveFromScene(mCubeArr[i], 1);
+				mObject.RemoveFromScene(mCubeArr[i], 1);
 			}else{
-				HelloTVXlet.RemoveFromScene(mCubeArr[i], 2);
+				mObject.RemoveFromScene(mCubeArr[i], 2);
 			}
 		}
 	}
