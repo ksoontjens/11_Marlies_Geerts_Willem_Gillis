@@ -1,0 +1,44 @@
+Signature-Version: 1.0
+Created-By: 1.6.0_16 (Sun Microsystems Inc.)
+BDJ-Signature-Version: 1.0
+SHA1-Digest-Manifest: H8aiRtJQebOv+6ESaWgQzNlqqPs=
+
+Name: hellotvxlet/HelloTVXlet$1.class
+SHA1-Digest: jL4rl+dtvgbj4VErj8qjkXfGCe4=
+
+Name: hellotvxlet/MijnComponent.class
+SHA1-Digest: cCKNXsi778+2czHOCad5yOFrlmw=
+
+Name: hellotvxlet/ObserverInterface.class
+SHA1-Digest: 7I8hUVSScXLvwhW4U8jRIO3/c8A=
+
+Name: hellotvxlet/Enemy.class
+SHA1-Digest: ca3PBFbyvQvn+C1k6U2h0AZLeEc=
+
+Name: hellotvxlet/Sprite.class
+SHA1-Digest: UmGnJf2ydDPLJRHj7F0uXEk4VSY=
+
+Name: hellotvxlet/HelloTVXlet.class
+SHA1-Digest: Q3it677HZQrtQoQmsxVtEIPuxOk=
+
+Name: hellotvxlet/MijnComponentImage.class
+SHA1-Digest: q30B8nyo4JhLfHbZp9SRlweNNkA=
+
+Name: hellotvxlet/Subject.class
+SHA1-Digest: 1uqgjkJNxldF1TcVe75wxTT+ujc=
+
+Name: hellotvxlet/EnemyRocket.class
+SHA1-Digest: b5n1ZqzIYqE/VAE3qbQPjp+eCME=
+
+Name: hellotvxlet/SubjectInterface.class
+SHA1-Digest: yqE62BSo98GW0grfzjU3Vezn/uI=
+
+Name: hellotvxlet/bluray.HelloTVXlet.perm
+SHA1-Digest: 84ZO/rYCyy0JStmaLbg1GDVEFhQ=
+
+Name: hellotvxlet/Player.class
+SHA1-Digest: BkU7bslku4/pi2+krBjZL9P9slQ=
+
+Name: hellotvxlet/MijnTimerTask.class
+SHA1-Digest: 15ChUx5upPLbMji+M/2dksR5G0A=
+
